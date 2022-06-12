@@ -7,7 +7,7 @@ import "CoreLibs/graphics"
 import "CoreLibs/sprites"
 import "CoreLibs/timer"
 
-import "animatedSprite"
+import "munchManSprite"
 
 local pd <const> = playdate
 local gfx <const> = pd.graphics
@@ -16,31 +16,7 @@ local playerSprite = nil
 
 -- A function to set up our game environment.
 function MyGameSetUp()
-    local playerImageTable = gfx.imagetable.new("images/munchMan")
-    local playerStates = {
-        {
-            name = "eatingLeft",
-            firstFrameIndex = 1,
-            framesCount = 5,
-            animationStartingFrame = 1,
-            tickStep = 2,
-            frameStep = 1,
-            reverse = false,
-            loop = true,
-            yoyo = true,
-            flip = gfx.kImageUnflipped,
-            xScale = 1,
-            yScale = 1,
-            nextAnimation = nil,
-
-            onFrameChangedEvent = function()end,
-            onStateChangedEvent = function()end,
-            onLoopFinishedEvent = function()end,
-            onAnimationEndEvent = function()end
-        }
-    }
-
-    playerSprite = AnimatedSprite.new(playerImageTable, playerStates, true)
+    playerSprite = MunchManSprite.new(true)
     playerSprite:moveTo( 200, 120 )
 
     -- We want an environment displayed behind our sprite.
@@ -60,7 +36,6 @@ function MyGameSetUp()
     --         backgroundImage:draw( 0, 0 )
     --     end
     -- )
-
 end
 
 -- Now we'll call the function above to configure our game.
