@@ -2,39 +2,46 @@
 -- (use the `import "myFilename"` command), but the simplest games can be written
 -- with just `main.lua`.
 
--- You'll want to import these in just about every project you'll work on.
-
 import "CoreLibs/object"
 import "CoreLibs/graphics"
 import "CoreLibs/sprites"
 import "CoreLibs/timer"
 
--- Declaring this "gfx" shorthand will make your life easier. Instead of having
--- to preface all graphics calls with "playdate.graphics", just use "gfx."
--- Performance will be slightly enhanced, too.
--- NOTE: Because it's local, you'll have to do it in every .lua source file.
+import "animatedSprite"
 
 local pd <const> = playdate
 local gfx <const> = pd.graphics
-
--- Here's our player sprite declaration. We'll scope it to this file because
--- several functions need to access it.
 
 local playerSprite = nil
 
 -- A function to set up our game environment.
 function MyGameSetUp()
+    local playerImageTable = gfx.imagetable.new("images/munchMan")
+    local playerStates = {
+        {
+            name = "eatingLeft",
+            firstFrameIndex = 1,
+            framesCount = 5,
+            animationStartingFrame = 1,
+            tickStep = 2,
+            frameStep = 1,
+            reverse = false,
+            loop = true,
+            yoyo = true,
+            flip = gfx.kImageUnflipped,
+            xScale = 1,
+            yScale = 1,
+            nextAnimation = nil,
 
-    -- Set up the player sprite.
-    -- The :setCenter() call specifies that the sprite will be anchored at its center.
-    -- The :moveTo() call moves our sprite to the center of the display.
+            onFrameChangedEvent = function()end,
+            onStateChangedEvent = function()end,
+            onLoopFinishedEvent = function()end,
+            onAnimationEndEvent = function()end
+        }
+    }
 
-    local playerImage = gfx.image.new("images/playerImage")
-    assert( playerImage ) -- make sure the image was where we thought
-
-    playerSprite = gfx.sprite.new( playerImage )
-    playerSprite:moveTo( 200, 120 ) -- this is where the center of the sprite is placed; (200,120) is the center of the Playdate screen
-    playerSprite:add() -- This is critical!
+    playerSprite = AnimatedSprite.new(playerImageTable, playerStates, true)
+    playerSprite:moveTo( 200, 120 )
 
     -- We want an environment displayed behind our sprite.
     -- There are generally two ways to do this:
@@ -43,16 +50,16 @@ function MyGameSetUp()
     --       and call :setZIndex() with some low number so the background stays behind
     --       your other sprites.
 
-    local backgroundImage = gfx.image.new( "images/background" )
-    assert( backgroundImage )
+    -- local backgroundImage = gfx.image.new( "images/background" )
+    -- assert( backgroundImage )
 
-    gfx.sprite.setBackgroundDrawingCallback(
-        function( x, y, width, height )
-            -- x,y,width,height is the updated area in sprite-local coordinates
-            -- The clip rect is already set to this area, so we don't need to set it ourselves
-            backgroundImage:draw( 0, 0 )
-        end
-    )
+    -- gfx.sprite.setBackgroundDrawingCallback(
+    --     function( x, y, width, height )
+    --         -- x,y,width,height is the updated area in sprite-local coordinates
+    --         -- The clip rect is already set to this area, so we don't need to set it ourselves
+    --         backgroundImage:draw( 0, 0 )
+    --     end
+    -- )
 
 end
 
