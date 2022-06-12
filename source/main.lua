@@ -14,7 +14,8 @@ import "CoreLibs/timer"
 -- Performance will be slightly enhanced, too.
 -- NOTE: Because it's local, you'll have to do it in every .lua source file.
 
-local gfx <const> = playdate.graphics
+local pd <const> = playdate
+local gfx <const> = pd.graphics
 
 -- Here's our player sprite declaration. We'll scope it to this file because
 -- several functions need to access it.
@@ -65,23 +66,23 @@ MyGameSetUp()
 -- This function is called right before every frame is drawn onscreen.
 -- Use this function to poll input, run game logic, and move sprites.
 
-function playdate.update()
+function pd.update()
 
     -- Poll the d-pad and move our player accordingly.
     -- (There are multiple ways to read the d-pad; this is the simplest.)
     -- Note that it is possible for more than one of these directions
     -- to be pressed at once, if the user is pressing diagonally.
 
-    if playdate.buttonIsPressed( playdate.kButtonUp ) then
+    if pd.buttonIsPressed( pd.kButtonUp ) then
         playerSprite:moveBy( 0, -2 )
     end
-    if playdate.buttonIsPressed( playdate.kButtonRight ) then
+    if pd.buttonIsPressed( pd.kButtonRight ) then
         playerSprite:moveBy( 2, 0 )
     end
-    if playdate.buttonIsPressed( playdate.kButtonDown ) then
+    if pd.buttonIsPressed( pd.kButtonDown ) then
         playerSprite:moveBy( 0, 2 )
     end
-    if playdate.buttonIsPressed( playdate.kButtonLeft ) then
+    if pd.buttonIsPressed( pd.kButtonLeft ) then
         playerSprite:moveBy( -2, 0 )
     end
 
@@ -90,6 +91,6 @@ function playdate.update()
     -- average-complexity games, you will.)
 
     gfx.sprite.update()
-    playdate.timer.updateTimers()
+    pd.timer.updateTimers()
 
 end
